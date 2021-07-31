@@ -4,7 +4,9 @@ const https = require('https');
 const fs = require('fs');
 const exec = require('@actions/exec');
 
-async function Main () {
+try {
+    const urlFileVsWhere = "https://github.com/microsoft/vswhere/releases/download/2.8.4/vswhere.exe";
+    const pathFileVsWhere = "./VsWhere.exe";
     const pathFolderMainProject = core.getInput('pathFolderMainProject');
     const projectFilePathAndName = core.getInput('projectFilePathAndName');
     const typeConfiguration = core.getInput('typeConfiguration');
@@ -12,8 +14,16 @@ async function Main () {
     const extCommand = core.getInput('extCommand');
     const compactFile = core.getInput('compactFile');
     const nameFileCompact = core.getInput('nameFileCompact');
-    
-    const resultGetLastMsBuild = await exec.exec('./VsWhere.exe -latest -requires Microsoft.Component.MSBuild -find MSBuild\\**\\Bin\\MSBuild.exe');
+
+    console.log(`Download file vswhere.exe`);
+    const file = fs.createWriteStream(pathFileVsWhere);
+    https.get(urlFileVsWhere, function(response) {
+      response.pipe(file);
+    });
+
+    const resultGetLastMsBuild = exec.exec('./VsWhere.exe -latest -requires Microsoft.Component.MSBuild -find MSBuild\\**\\Bin\\MSBuild.exe').then((num) => {
+        console.log(num)
+    });
     console.log(`Result get last MSBuild: ${resultGetLastMsBuild}`);
 
     core.addPath('C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\bin');
@@ -50,21 +60,6 @@ async function Main () {
 
     const resultRemoveAppFolder =  await exec.exec('rmdir /Q /S C:\\App');
     console.log(`Result Remove App Folder: ${resultRemoveAppFolder}, command: rmdir /Q /S C:\\App`);
-}
-
-try {
-    const urlFileVsWhere = "https://github.com/microsoft/vswhere/releases/download/2.8.4/vswhere.exe";
-    const pathFileVsWhere = "./VsWhere.exe";
-
-    console.log(`Download file vswhere.exe`);
-    const file = fs.createWriteStream(pathFileVsWhere);
-    https.get(urlFileVsWhere, function(response) {
-      response.pipe(file);
-    });
-
-    Main().then(() => {
-        console.log("Finish Operation");
-    });
 
     console.log(`Success compiler!`);
 } catch (error) {
