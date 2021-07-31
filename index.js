@@ -3,10 +3,10 @@ const github = require('@actions/github');
 const https = require('https');
 const fs = require('fs');
 const exec = require('@actions/exec');
-const urlFileVsWhere = "https://github.com/microsoft/vswhere/releases/download/2.8.4/vswhere.exe";
-const pathFileVsWhere = "./VsWhere.exe";
 
 try {
+    const urlFileVsWhere = "https://github.com/microsoft/vswhere/releases/download/2.8.4/vswhere.exe";
+    const pathFileVsWhere = "./VsWhere.exe";
     const pathFolderMainProject = core.getInput('pathFolderMainProject');
     const projectFilePathAndName = core.getInput('projectFilePathAndName');
     const typeConfiguration = core.getInput('typeConfiguration');
