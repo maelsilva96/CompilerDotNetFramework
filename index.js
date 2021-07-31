@@ -7,7 +7,7 @@ const exec = require('@actions/exec');
 async function run () {
     try {
         const urlFileVsWhere = "https://github.com/microsoft/vswhere/releases/download/2.8.4/vswhere.exe";
-        const pathFileVsWhere = "./VsWhere.exe";
+        const pathFileVsWhere = "C:\\VsWhere\\vswhere.exe";
         const pathFolderMainProject = core.getInput('pathFolderMainProject');
         const projectFilePathAndName = core.getInput('projectFilePathAndName');
         const typeConfiguration = core.getInput('typeConfiguration');
@@ -16,13 +16,18 @@ async function run () {
         const compactFile = core.getInput('compactFile');
         const nameFileCompact = core.getInput('nameFileCompact');
     
+        await exec.exec('mkdir C:\\VsWhere');
+        console.log(`Result Create VsWhere Folder, command: mkdir C:\\VsWhere`);
+
         console.log(`Download file vswhere.exe`);
         const file = fs.createWriteStream(pathFileVsWhere);
         https.get(urlFileVsWhere, function(response) {
           response.pipe(file);
         });
+
+        core.addPath("C:\\VsWhere");
     
-        await exec.exec('./VsWhere.exe -latest -requires Microsoft.Component.MSBuild -find MSBuild\\**\\Bin\\MSBuild.exe');
+        await exec.exec('vswhere.exe -latest -requires Microsoft.Component.MSBuild -find MSBuild\\**\\Bin\\MSBuild.exe');
         console.log(`Result get last MSBuild, command: ./VsWhere.exe -latest -requires Microsoft.Component.MSBuild -find MSBuild\\**\\Bin\\MSBuild.exe`);
     
         core.addPath('C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\bin');
