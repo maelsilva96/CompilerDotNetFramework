@@ -26,6 +26,7 @@ async function run () {
         });
 
         core.addPath("C:\\VsWhere");
+        core.exportVariable('vswhere', 'C:\\VsWhere\\vswhere.exe');
     
         await exec.exec('vswhere.exe -latest -requires Microsoft.Component.MSBuild -find MSBuild\\**\\Bin\\MSBuild.exe');
         console.log(`Result get last MSBuild, command: ./VsWhere.exe -latest -requires Microsoft.Component.MSBuild -find MSBuild\\**\\Bin\\MSBuild.exe`);
