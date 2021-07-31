@@ -22,43 +22,43 @@ async function run () {
           response.pipe(file);
         });
     
-        const resultGetLastMsBuild = await exec.exec('./VsWhere.exe -latest -requires Microsoft.Component.MSBuild -find MSBuild\\**\\Bin\\MSBuild.exe');
-        console.log(`Result get last MSBuild: ${resultGetLastMsBuild}`);
+        await exec.exec('./VsWhere.exe -latest -requires Microsoft.Component.MSBuild -find MSBuild\\**\\Bin\\MSBuild.exe');
+        console.log(`Result get last MSBuild, command: ./VsWhere.exe -latest -requires Microsoft.Component.MSBuild -find MSBuild\\**\\Bin\\MSBuild.exe`);
     
         core.addPath('C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\bin');
         core.exportVariable('MSBuild', 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\bin\\MSBuild.exe');
         
-        const resultCreateBuildFolder = await exec.exec('mkdir C:\\_build');
-        console.log(`Result Create Build Folder: ${resultCreateBuildFolder}, command: mkdir mkdir C:\\_build`);
+        await exec.exec('mkdir C:\\_build');
+        console.log(`Result Create Build Folder, command: mkdir mkdir C:\\_build`);
     
-        const resultCreateAppFolder = await exec.exec('mkdir C:\\App');
-        console.log(`Result Create App Folder: ${resultCreateAppFolder}, command: mkdir C:\\App`);
+        await exec.exec('mkdir C:\\App');
+        console.log(`Result Create App Folder, command: mkdir C:\\App`);
     
-        const resultCopyFilesToAppFolder = await exec.exec(`|\nXcopy ${pathFolderMainProject} C:\\App /E /H /C /I`);
-        console.log(`Result Copy Files: ${resultCopyFilesToAppFolder}, command: \nXcopy ${pathFolderMainProject} C:\\App /E /H /C /I`);
+        await exec.exec(`Xcopy ${pathFolderMainProject} C:\\App /E /H /C /I`);
+        console.log(`Result Copy Files, command: \nXcopy ${pathFolderMainProject} C:\\App /E /H /C /I`);
     
-        const resultRestoreProject = await exec.exec(`nuget restore C:\\App\\${projectFilePathAndName}`);
-        console.log(`Result Restore Project: ${resultRestoreProject}, command: nuget restore C:\\App\\${projectFilePathAndName}`);
+        await exec.exec(`nuget restore C:\\App\\${projectFilePathAndName}`);
+        console.log(`Result Restore Project, command: nuget restore C:\\App\\${projectFilePathAndName}`);
     
-        const resultBuildProject = await exec.exec(`|\nMSBuild.exe /t:build /p:Configuration=${typeConfiguration} /p:Platform="${typePlatform}" ${extCommand} /p:OutDir="C:\_build" "C:\\App\\${projectFilePathAndName}"`);
-        console.log(`Result Build Project: ${resultBuildProject}, command: MSBuild.exe /t:build /p:Configuration=${typeConfiguration} /p:Platform="${typePlatform}" ${extCommand} /p:OutDir="C:\_build" "C:\\App\\${projectFilePathAndName}"`);
+        await exec.exec(`|\nMSBuild.exe /t:build /p:Configuration=${typeConfiguration} /p:Platform="${typePlatform}" ${extCommand} /p:OutDir="C:\_build" "C:\\App\\${projectFilePathAndName}"`);
+        console.log(`Result Build Project, command: MSBuild.exe /t:build /p:Configuration=${typeConfiguration} /p:Platform="${typePlatform}" ${extCommand} /p:OutDir="C:\_build" "C:\\App\\${projectFilePathAndName}"`);
     
         if (compactFile == true || compactFile == 'true') {
-            const resultCompress = await exec.exec(`powershell Compress-Archive C:\\_build\* .\\${nameFileCompact}`);
-            console.log(`Result Compress: ${resultCompress}, command: powershell Compress-Archive C:\\_build\* .\\${nameFileCompact}`);
+            await exec.exec(`powershell Compress-Archive C:\\_build\* .\\${nameFileCompact}`);
+            console.log(`Result Compress, command: powershell Compress-Archive C:\\_build\* .\\${nameFileCompact}`);
         } else {
-            const resultCreateBuildFolder = await exec.exec(`mkdir .\\_build`);
-            console.log(`Result Create Build Folder: ${resultCreateBuildFolder}, command: mkdir _build`);
+            await exec.exec(`mkdir .\\_build`);
+            console.log(`Result Create Build Folder, command: mkdir _build`);
     
-            const resultCopyFolder = await exec.exec(`|\nXcopy C:\\_build .\\_build /E /H /C /I`);
-            console.log(`Result Build to Build Folder: ${resultCopyFolder}, command: Xcopy C:\\_build .\\_build /E /H /C /I`);
+            await exec.exec(`|\nXcopy C:\\_build .\\_build /E /H /C /I`);
+            console.log(`Result Build to Build Folder, command: Xcopy C:\\_build .\\_build /E /H /C /I`);
         }
     
-        const resultRemoveBuildFolder = await exec.exec('rmdir /Q /S C:\\_build');
-        console.log(`Result Remove Build Folder: ${resultRemoveBuildFolder}, command: rmdir /Q /S C:\\_build`);
+        await exec.exec('rmdir /Q /S C:\\_build');
+        console.log(`Result Remove Build Folder, command: rmdir /Q /S C:\\_build`);
     
-        const resultRemoveAppFolder =  await exec.exec('rmdir /Q /S C:\\App');
-        console.log(`Result Remove App Folder: ${resultRemoveAppFolder}, command: rmdir /Q /S C:\\App`);
+        await exec.exec('rmdir /Q /S C:\\App');
+        console.log(`Result Remove App Folder, command: rmdir /Q /S C:\\App`);
     
         console.log(`Success compiler!`);
     } catch (error) {
