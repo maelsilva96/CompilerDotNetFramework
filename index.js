@@ -53,6 +53,7 @@ try {
     core.setFailed(error.message);
 }
 
+/*
 function Consoles () {
     
     console.log(`Result Create Build Folder: ${resultCreateBuildFolder}, command: mkdir mkdir C:\\_build`);
@@ -67,3 +68,4 @@ function Consoles () {
     console.log(`Result Remove Build Folder: ${resultRemoveBuildFolder}, command: rmdir /Q /S C:\\_build`);
     console.log(`Result Remove App Folder: ${resultRemoveAppFolder}, command: rmdir /Q /S C:\\App`);
 }
+*/
