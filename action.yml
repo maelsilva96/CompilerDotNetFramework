@@ -1,0 +1,37 @@
+name: 'Compiler .NET Framework'
+description: 'Compiler .NET Framework'
+inputs:
+  pathFolderMainProject: 
+    description: 'Path the project'
+    required: true
+    default: './'
+  projectFilePathAndName: 
+    description: 'Project file name'
+    required: true
+    default: 'item.sln'
+  typeConfiguration: 
+    description: 'Type configuration /p:Configuration={item}'
+    required: true
+    default: 'Release'
+  extCommand: 
+    description: 'Any commands (Ex.: /p:SolutionDir="item")'
+    required: false
+    default: ''
+  typePlatform: 
+    description: 'Type platform /p:Platform={item}'
+    required: true
+    default: 'AnyCPU'
+  compactFile: 
+    description: 'Compact build to send'
+    required: false
+    default: true
+  nameFileCompact: 
+    description: 'Name zip file'
+    required: false
+    default: 'build.zip'
+outputs:
+  result:
+    description: 'Result operation'
+runs:
+  using: 'node12'
+  main: 'index.js'
